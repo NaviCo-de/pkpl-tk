@@ -4,12 +4,10 @@ import { supabase } from '@/lib/supabase';
 
 export default function LoginButton() {
   const handleGoogleLogin = async () => {
-    // Memerintahkan Satpam (Supabase) untuk memulai proses otentikasi Google
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        // Ke mana pengunjung diarahkan setelah sukses login
-        redirectTo: `${window.location.origin}/`, 
+        redirectTo: `${window.location.origin}/auth/callback`, 
       },
     });
 
