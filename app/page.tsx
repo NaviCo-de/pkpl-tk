@@ -1,38 +1,27 @@
-import { createClient } from '@/lib/supabase-server';
+import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import LoginButton from './components/LoginButton';
-import EmailAuth from './components/EmailAuth';
-import Profile from './components/Profile';
+import { redirect } from 'next/navigation';
+import { signOut } from '@/auth';
+import BudakPacilList from './components/BudakPacilList';
 import ThemeController from './components/ThemeController';
-import BudakPacilList from './components/BudakPacilList'; 
+
+export const dynamic = 'force-dynamic';
 
 export default async function Page() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const session = await auth();
+  const user = session?.user;
 
   let isBudakPacil = false;
 
-  if (user && user.email) {
-    const dbUser = await prisma.user.upsert({
-      where: { email: user.email },
-      update: {}, 
-      create: {
-        email: user.email,
-        name: user.user_metadata?.full_name || user.user_metadata?.name || 'Pengguna Baru',
-        role: 'USER', 
-        batch: 'Belum diisi', 
-        major: 'Belum diisi',
-        hobby: 'Belum diisi',
-      },
-    });
-
-    isBudakPacil = dbUser.role === 'BUDAK_PACIL';
+  if (user?.id) {
+    const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
+    isBudakPacil = dbUser?.role === 'BUDAK_PACIL';
   }
 
   return (
     <div className="max-w-5xl mx-auto p-8 min-h-screen">
       <h1 className="text-4xl font-black mb-10 text-center">Sistem Inti Organisasi</h1>
-      
+
       <div className="mb-12">
         <BudakPacilList />
       </div>
@@ -50,26 +39,31 @@ export default async function Page() {
           )}
         </div>
 
-        <div>
+        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
           {!user ? (
-            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-              <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2">Gerbang Masuk</h2>
-              <EmailAuth /> 
-              <div className="flex items-center text-gray-400 my-6">
-                <hr className="flex-1" />
-                <span className="px-3 text-xs uppercase tracking-wider font-semibold">Atau akses cepat</span>
-                <hr className="flex-1" />
-              </div>
-              <LoginButton />
+            <div>
+              <h2 className="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Gerbang Masuk</h2>
+              <a href="/login" className="block w-full text-center bg-blue-600 text-white py-2 rounded">
+                Login / Daftar
+              </a>
             </div>
           ) : (
-            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-              <h2 className="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Kartu Identitas Anda</h2>
-              <Profile />
+            <div>
+              <h2 className="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Kartu Identitas</h2>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p><strong>Nama:</strong> {user.name}</p>
+              <p><strong>Role:</strong> {isBudakPacil ? 'Budak Pacil' : 'User'}</p>
+              <form action={async () => {
+                'use server';
+                await signOut({ redirectTo: '/' });
+              }}>
+                <button type="submit" className="mt-4 bg-red-600 text-white px-3 py-1 rounded text-sm">
+                  Logout
+                </button>
+              </form>
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
