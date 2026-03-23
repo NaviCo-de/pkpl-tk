@@ -32,7 +32,7 @@ export default async function BudakPacilList() {
           >
             <div className="flex items-center gap-4 mb-4">
               <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                {budak.name.charAt(0).toUpperCase()}
+                {(budak.name ?? '?').charAt(0).toUpperCase()}
               </div>
               <div>
                 <h3 className="font-bold text-lg text-gray-900">{budak.name}</h3>
