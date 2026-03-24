@@ -21,7 +21,7 @@ export default async function Page() {
 
   return (
     <div className="max-w-5xl mx-auto p-8 min-h-screen">
-      <h1 className="text-4xl font-black mb-10 text-center">Sistem Inti Organisasi</h1>
+      <h1 className="text-4xl font-black mb-10 text-center">TK2 PKPL</h1>
 
       <div className="mb-12">
         <BudakPacilList />
