@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { signOut } from '@/auth';
 import BudakPacilList from './components/BudakPacilList';
 import ThemeController from './components/ThemeController';
+import EditLogViewer from './components/EditLogViewer';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,6 +66,7 @@ export default async function Page() {
           )}
         </div>
       </div>
+      <EditLogViewer />
     </div>
   );
 }
