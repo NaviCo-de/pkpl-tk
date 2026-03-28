@@ -215,7 +215,7 @@ export default function ThemeController() {
       {/* Header */}
       <div className="flex items-center justify-between mb-1">
         <h2 className="text-lg font-black text-purple-700 flex items-center gap-2">
-          👑 Panel Tema — Budak Pacil
+          Panel Tema — Budak Pacil
         </h2>
         <span className="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-semibold">
           LIVE

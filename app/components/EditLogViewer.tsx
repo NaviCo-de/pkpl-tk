@@ -104,7 +104,7 @@ export default function EditLogViewer() {
     <div className="mt-10">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-black text-gray-800 border-b-2 border-gray-300 pb-2 flex-1">
-          📋 Log Perubahan Tema
+          Log Perubahan Tema
         </h2>
         <div className="flex items-center gap-2 ml-4 shrink-0">
           <span className="inline-block w-2 h-2 rounded-full bg-green-400 animate-pulse" />
